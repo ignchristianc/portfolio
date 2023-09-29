@@ -15,19 +15,19 @@
 -- 1. CONDITIONS THAT INCREASE THE RISK OF ACCIDENT
 	-- Analysis of accident conditions
 	WITH dark_condition AS (SELECT 'Dark' AS light_condition,
-							COUNT(CASE WHEN light_condition_name ILIKE '%- Lighted' THEN consecutive_number END) AS lighted,
-							COUNT(CASE WHEN light_condition_name ILIKE '%- Not Lighted' THEN consecutive_number END) AS not_lighted,
-							COUNT(CASE WHEN light_condition_name ILIKE '%- Unknown Lighting' THEN consecutive_number END) AS unknown_lighting
-							FROM crash_2021
+				COUNT(CASE WHEN light_condition_name ILIKE '%- Lighted' THEN consecutive_number END) AS lighted,
+				COUNT(CASE WHEN light_condition_name ILIKE '%- Not Lighted' THEN consecutive_number END) AS not_lighted,
+				COUNT(CASE WHEN light_condition_name ILIKE '%- Unknown Lighting' THEN consecutive_number END) AS unknown_lighting
+				FROM crash_2021
 							GROUP BY light_condition),
 
 	other_than_dark_condition AS (SELECT light_condition_name AS light_condition, 
-								  COUNT(CASE WHEN light_condition_name ILIKE '%- Lighted' THEN consecutive_number END) AS lighted,
-								  COUNT(CASE WHEN light_condition_name ILIKE '%- Not Lighted' THEN consecutive_number END) AS not_lighted,
-								  COUNT(consecutive_number) AS unknown_lighting
-								  FROM crash_2021
-								  WHERE light_condition_name NOT IN ('Dark - Lighted', 'Dark - Not Lighted', 'Dark - Unknown Lighting')
-								  GROUP BY light_condition_name)
+				      COUNT(CASE WHEN light_condition_name ILIKE '%- Lighted' THEN consecutive_number END) AS lighted,
+				      COUNT(CASE WHEN light_condition_name ILIKE '%- Not Lighted' THEN consecutive_number END) AS not_lighted,
+				      COUNT(consecutive_number) AS unknown_lighting
+				      FROM crash_2021
+				      WHERE light_condition_name NOT IN ('Dark - Lighted', 'Dark - Not Lighted', 'Dark - Unknown Lighting')
+				      GROUP BY light_condition_name)
 
 	SELECT *
 	FROM dark_condition
